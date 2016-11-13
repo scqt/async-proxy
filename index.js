@@ -1,13 +1,41 @@
+'use strict';
 //Lets require/import the HTTP module
-var http = require('http');
+const http = require('http');
+const fetch = require( 'node-fetch' );
 
 //Lets define a port we want to listen to
 const PORT=8082;
 
+const fetchUrl = ( url ) => {
+	fetch( url )
+		.then( ( response ) => {
+			return response.text();
+		} )
+		.then( ( text ) => {
+			//console.log( text );
+		} )
+		.catch( () => {} );
+};
+
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-	response.end('It Works!! Path Hit: ' + request.url);
-	console.dir( request );
+	if ( request.method !== 'POST' ) {
+		console.log( 'ignoring request with method: ' + request.method );
+		response.end();
+		return;
+	}
+
+	response.end( JSON.stringify( { status: 'ok' } ) );
+
+	let data = '';
+	request.on( 'data', ( chunk ) => {
+		data = data + chunk.toString();
+	} );
+
+	request.on( 'end', () => {
+		console.log( data );
+		fetchUrl( 'https://nabeel.us' );
+	} );
 }
 
 //Create a server

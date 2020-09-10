@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/scqt/async-proxy#readme",
   "dependencies": {
-    "node-fetch": "^1.6.3"
+    "node-fetch": "^2.6.1"
   }
 }
